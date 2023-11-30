@@ -1,6 +1,8 @@
 package com.PruebaTecnica.AppProductos.Controller;
 
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +47,17 @@ public class ProductoControlador {
     }
 
     @GetMapping("/productos/listado")
-    public List<Producto> listarProductos(){
-        return (List<Producto>) productoRepositorio.findAll();
+    public List<Producto> listarProductos() {
+        List<Producto> productos = (List<Producto>) productoRepositorio.findAll();
+
+        Collections.sort(productos, new Comparator<Producto>() {
+            @Override
+            public int compare(Producto producto1, Producto producto2) {
+                return Double.compare(producto1.getPrecio(), producto2.getPrecio());
+            }
+        });
+
+        return productos;
     }
 
     @DeleteMapping("/productos/eliminar/{id}")
